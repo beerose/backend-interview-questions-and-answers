@@ -28,18 +28,18 @@ void doSomething() {
 }
 
 int main() {
-    globalValue = 1;
+  globalValue = 1;
 
-    doSomething();
+  doSomething();
 
-    // Programmer may not know that doSomething changes globalValue
-    // and still expects globalValue to be 1
+  // Programmer may not know that doSomething changes globalValue
+  // and still expects globalValue to be 1
 
-    if (globalValue == 1)
-        // handle globalValue = 1
-    else
-        // handle globalValue = 2
-    return 0;
+  if (globalValue == 1)
+      // handle globalValue = 1
+  else
+      // handle globalValue = 2
+  return 0;
 }
 ```
 
@@ -55,7 +55,7 @@ Class `UserController` without IoC:
 class UserController {
   connectSQL() {
     SQLConnection connection = new PostgreSQLConnection()
-		connection.connect()
+        connection.connect()
   }
 }
 ```
@@ -66,15 +66,15 @@ Class `UserController` with IoC:
 
 ```
 class UserController {
-	SQLConnection _connection;
+  SQLConnection _connection;
 
-	constructor(SQLConnection connection) {
-        _connection = connection;
-    }
+  constructor(SQLConnection connection) {
+      _connection = connection;
+  }
 
-    connectSQL() {
-	    _connection.connect()
-    }
+  connectSQL() {
+      _connection.connect()
+  }
 }
 ```
 
@@ -93,15 +93,15 @@ So, let's say we have a Person, which has property _backpack_.
 
 ```
 class Person {
-	Backpack backpack;
+  Backpack backpack;
 
-	setBackpack(Backpack newBackpack) {
-		backpack = newBackpack;
-	}
+  setBackpack(Backpack newBackpack) {
+      backpack = newBackpack;
+  }
 
-	getBackpack() {
-		return backpack;
-	}
+  getBackpack() {
+      return backpack;
+  }
 }
 ```
 
@@ -111,8 +111,8 @@ We have also the Backpack class:
 class Backpack {
   Dict items;
 
-	getItem(itemName) {
-		return items[itemName];
+    getItem(itemName) {
+        return items[itemName];
   }
 }
 ```
@@ -142,11 +142,11 @@ So, let's modify Person class:
 
 ```
 class Person {
-	Backpack backpack;
+  Backpack backpack;
 
-	getItem(itemName) {
-		return backpack[itemName];
-	}
+  getItem(itemName) {
+      return backpack[itemName];
+  }
 }
 ```
 
@@ -169,11 +169,14 @@ It surely better models the real-world scenario. You don't have to be afraid tha
 
 > 5. Data-Mapper is a design pattern that promotes the use of a layer of Mappers that moves data between objects and a database while keeping them independent of each other and the mapper itself. On the contrary, in Active-Record objects directly incorporate operations for persisting themselves to a database, and properties corresponding to the underlying database tables. Do you have an opinion on those patterns? When would you use one instead of the other?
 
-(WIP)
+Active-Record may be a good choice for simple CRUD apps with no business logic. It requires much less setup than Data-Mapper, so allows to have an app up and running fast. It's easy to learn and easy to use.
 
-### Active-Record vs Data-Mapper
+In any other cases (which is -- most), when the app is a little bit more complex than simple CRUD, Data-Mapper would be a better choice. It allowes to have more flexibilty between domain and database than Active-Record.
 
-| Active-Record                                                                                                                                    | Data-Mapper                                                                                                                              |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Active Record style ORMs map an object to a database row                                                                                         | Data Mapper style completely separates your domain from the persistence layer                                                            |
-| With Active Record style ORMs, the model is able to determine the properties of the model automatically by looking at the schema of the database | The big benefit of the Data Mapper pattern is, your domain objects don’t need to know anything about how they are stored in the database |
+Some thoughts on those patterns and ORMs in general:
+
+- Less SQL and relying on the ORM may cause worse performance -- you can do inefficient not knowing they are inefficient.
+- Each ORM is different -- every time you switch to another project, which uses different ORM, you start learning it from scratch. It may not apply to Active-Record, though.
+- You can't do _everything_ with ORM. They are more or less limited when it comes to writing some complex queries.
+- Domain is tightly coupled to the database in Active-Record.
+- In general Data-Mappers are little bit harder to learn and require more setup than AR.
