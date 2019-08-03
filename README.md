@@ -20,7 +20,7 @@ Based on the [arialdomartini's](https://github.com/arialdomartini) [list](https:
 
 Code example:
 
-```
+```c
 int globalValue;
 
 void doSomething() {
@@ -51,11 +51,11 @@ In the programming world _Inversion of Control_ means that instead of having **c
 
 Class `UserController` without IoC:
 
-```
+```c#
 class UserController {
-  connectSQL() {
+  void connectSQL() {
     SQLConnection connection = new PostgreSQLConnection()
-        connection.connect()
+      connection.connect()
   }
 }
 ```
@@ -64,16 +64,16 @@ In the above example `UserController` depends on the implementation of `Postgre
 
 Class `UserController` with IoC:
 
-```
+```c#
 class UserController {
-  SQLConnection _connection;
+  private SQLConnection _connection;
 
-  constructor(SQLConnection connection) {
-      _connection = connection;
+  UserController(SQLConnection connection) {
+    _connection = connection;
   }
 
   connectSQL() {
-      _connection.connect()
+    _connection.connect()
   }
 }
 ```
@@ -91,35 +91,35 @@ Now `UserController` depends on the abstraction of `SQLConnection`, not implemen
 
 So, let's say we have a Person, which has property _backpack_.
 
-```
+```c#
 class Person {
   Backpack backpack;
 
-  setBackpack(Backpack newBackpack) {
-      backpack = newBackpack;
+  void setBackpack(Backpack newBackpack) {
+    backpack = newBackpack;
   }
 
-  getBackpack() {
-      return backpack;
+  Backpack getBackpack() {
+    return backpack;
   }
 }
 ```
 
 We have also the Backpack class:
 
-```
+```c#
 class Backpack {
-  Dict items;
+  Dictionary<string, Item> items;
 
-    getItem(itemName) {
-        return items[itemName];
+  Item getItem(string itemName) {
+    return items[itemName];
   }
 }
 ```
 
 Now, let's say someone asks for the lighter from some person's backpack:
 
-```
+```c#
 Person jon = new Person();
 Backpack backpack = jon.getBackpack();
 Item item = backpack.getItem('lighter');
@@ -140,19 +140,19 @@ What would you do if someone asks you for a lighter? I would take a lighter from
 
 So, let's modify Person class:
 
-```
+```c#
 class Person {
   Backpack backpack;
 
-  getItem(itemName) {
-      return backpack[itemName];
+  Item getItem(itemName) {
+    return backpack.items[itemName];
   }
 }
 ```
 
 Now, when some asks for an item it would look in the following way:
 
-```
+```c#
 Person jon = new Person();
 Item lighter = jon.getItem('lighter');
 ```
